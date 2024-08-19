@@ -14,7 +14,7 @@ return new class () extends Migration {
             $table->id();
             $table->string('url');
             $table->string('token')->nullable();
-            $table->string('preffered_columns')->nullable();
+            $table->json('preffered_columns')->nullable();
             $table->timestamps();
         });
     }

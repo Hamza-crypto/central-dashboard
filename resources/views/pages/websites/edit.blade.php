@@ -11,24 +11,6 @@
 @endsection
 @section('content')
 
-    @if (session('success'))
-        <script>
-            Swal.fire({
-                title: 'Success',
-                text: 'Status has been updated.',
-                icon: 'success'
-            });
-        </script>
-    @endif
-
-
-    <div id="error-messages" class="alert alert-danger alert-dismissible" style="display: none;" role="alert">
-        <div class="alert-message">
-            <strong>Error!</strong> Please fix the following issues:
-            <ul></ul>
-        </div>
-    </div>
-
     <h1 class="h3 mb-3">Add New Website</h1>
     <div class="row">
         <div class="col-md-12 col-xl-12">
@@ -42,13 +24,21 @@
 
                                 <div class="mb-3">
                                     <label for="name" class="form-label"> URL</label>
-                                    <input type="text" class="form-control" name="url" placeholder="Website Name">
+                                    <input type="text" class="form-control" name="url" value="{{ $website->url }}"
+                                        placeholder="Website Name">
                                 </div>
 
 
                                 <div class="mb-3">
                                     <label for="token" class="form-label">Token (Optional)</label>
-                                    <input type="text" class="form-control" name="token" placeholder="Token">
+                                    <input type="text" class="form-control" name="token" value="{{ $website->token }}"
+                                        placeholder="Token">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="token" class="form-label">Preffered Fields (Optional)</label>
+                                    <input type="text" class="form-control select2" name="preffered_columns"
+                                        value="{{ $website->preffered_columns }}" placeholder="Preffered columns">
                                 </div>
 
                             </div>

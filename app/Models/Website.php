@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Website extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'url',
+        'token',
+        'preffered_columns'
+    ];
+
+    protected $casts = [
+        'preferred_columns' => 'array',
+    ];
 }

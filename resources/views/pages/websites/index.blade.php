@@ -5,26 +5,7 @@
 @section('scripts')
     <script src="{{ asset('/assets/js/custom.js') }}"></script>
     <script>
-        var currentPage = 1;
-        var totalPages = 1;
-        var perPage = 10;
-        var filters = {};
-
-
-
-
-
-
-
         $(document).ready(function() {
-            fetchData(currentPage);
-
-            $(document).on('click', '.delete-user-btn', function() {
-                var resourceId = $(this).data('id');
-                var csrfToken = '{{ csrf_token() }}';
-                console.log(csrfToken);
-                deleteConfirmation(resourceId, 'group', 'groups', csrfToken);
-            });
 
         });
     </script>
@@ -32,63 +13,54 @@
 
 @section('content')
 
-
-    {{-- @include('pages.groups._inc.filters') --}}
+    @if (session('success'))
+        <x-alert type="success">{{ session('success') }}</x-alert>
+    @endif
 
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <div id="datatables-reponsive_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
-                        <div class="row">
-                            <div class="col-sm-12 col-md-6">
-                                <div class="table_length" id="table_length"><label>Show <select
-                                            name="datatables-reponsive_length" id="per-page-select"
-                                            class="form-select form-select-sm">
+                    <table id="gateway-table" class="table table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Website</th>
+                                <th>Created at</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        @php  $count = 1 @endphp
+                        @foreach ($websites as $website)
+                            <tr>
+                                <td>{{ $count++ }} </td>
 
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
-                                        </select> entries</label></div>
-                            </div>
 
-                        </div>
-                        <div class="row dt-row">
-                            <div class="col-sm-12">
-                                <table id="users-table" class="table table-striped dataTable no-footer dtr-inline"
-                                    style="width: 100%;">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Description</th>
-                                            <th>Status</th>
-                                            <th>Created At</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
+                                <td>{{ $website->url }}</td>
 
-                                    <tbody>
+                                <td>{{ $website->created_at->diffForHumans() }}</td>
+                                <td class="table-action">
+                                    <a href="{{ route('websites.edit', $website->id) }}" class="btn"
+                                        style="display: inline">
+                                        <i class="fa fa-edit text-info"></i>
+                                    </a>
+                                    <form method="post" action="{{ route('websites.destroy', $website->id) }}"
+                                        onsubmit="return confirmSubmission(this, 'Are you sure you want to delete location ' + '{{ "$website->url" }}')"
+                                        style="display: inline">
+                                        @csrf
+                                        @method('DELETE')
 
-                                    </tbody>
+                                        <button class="btn text-danger"
+                                            href="{{ route('websites.destroy', $website->id) }}">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </form>
 
-                                </table>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12 col-md-5">
-                                <div class="dataTables_info" id="table_entries_info" role="status" aria-live="polite">
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-7">
-                                <div class="dataTables_paginate paging_simple_numbers" id="datatables-reponsive_paginate">
-                                    <ul class="pagination"></ul>
-                                </div>
-                            </div>
+                                </td>
+                            </tr>
+                        @endforeach
 
-                        </div>
-                    </div>
+                    </table>
                 </div>
             </div>
         </div>
