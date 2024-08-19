@@ -4,14 +4,12 @@ namespace App\Imports;
 
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class GetData implements ToCollection, WithHeadingRow
+class GetData implements ToCollection
 {
     public $filteredRows;
     protected $categories;
 
-    // Accept an array of categories in the constructor
     public function __construct(array $categories)
     {
         $this->categories = $categories;
@@ -19,10 +17,26 @@ class GetData implements ToCollection, WithHeadingRow
 
     public function collection(Collection $rows)
     {
-        // Filter rows where the 'category' column matches any of the selected categories
-        $this->filteredRows = $rows->filter(function ($row) {
-            return in_array($row['category'], $this->categories); // Use 'category' header name
+
+        $headerRow = $rows->shift();
+
+        if (!$headerRow) {
+            throw new \Exception("No headers found in the Excel file.");
+        }
+
+        // Preserve header case
+        $headers = $headerRow->toArray();
+
+
+        $rows->filter(function ($row) use ($headers) {
+            $rowData = array_combine($headers, $row->toArray());
+            if($rowData['Category'] != null) {
+                if(in_array($rowData['Category'], $this->categories)) {
+                    $this->filteredRows[] = $rowData;
+                }
+            }
         });
+
     }
 
     public function getFilteredRows()

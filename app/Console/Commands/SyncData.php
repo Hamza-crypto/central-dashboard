@@ -15,9 +15,6 @@ class SyncData extends Command
 
     protected $description = 'It sends data to wordpress website';
 
-    /**
-     * Execute the console command.
-     */
     public function handle()
     {
         $file = FileEntry::where('active', 1)->first();
@@ -29,17 +26,9 @@ class SyncData extends Command
 
             $import = new GetData($categories);
             Excel::import($import, $filePath);
-            $filteredRows = $import->getFilteredRows();
+            $dataToSend = $import->getFilteredRows();
 
-            // Convert filtered rows to an array (with header names as keys)
-            $dataToSend = $filteredRows->map(function ($row) {
-                return $row->toArray(); // Convert the row to an array with header names as keys
-            })->toArray();
-
-            // Example API endpoint URL
             $apiUrl = $ws->url . '/wp-json/custom-import/v1/import';
-
-            // Send the data to the API endpoint
             Http::post($apiUrl, [
                 'data' => $dataToSend
             ]);
