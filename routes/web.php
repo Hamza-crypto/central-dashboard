@@ -107,3 +107,11 @@ Route::resource('websites', WebsiteController::class);
 Route::resource('files', FileController::class);
 
 Route::post('sync_data', [FileController::class,'sync_data'])->name('data.sync');
+
+
+
+Route::get('sync', function () {
+
+    Artisan::call('sync:wordpress-laravel');
+
+});

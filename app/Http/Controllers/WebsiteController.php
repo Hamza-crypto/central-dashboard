@@ -23,8 +23,13 @@ class WebsiteController extends Controller
 
     public function store(Request $request)
     {
-        $website = Website::create($request->all());
 
+        $data = $request->all();
+
+        // Remove trailing slash from website URL (if present)
+        $data['url'] = rtrim($data['url'], "/");
+
+        Website::create($data);
         return redirect()->route('websites.index')->with('success', 'Website created successfully');
 
     }
