@@ -15,9 +15,8 @@
         <div class="col-12 col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Images Download Report</h5>
+                    <h5 class="card-title mb-0">Stats Widgets</h5>
                 </div>
-
 
                 <div class="card-body">
 

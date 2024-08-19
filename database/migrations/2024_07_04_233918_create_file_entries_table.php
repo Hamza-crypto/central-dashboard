@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,10 +12,9 @@ return new class extends Migration
     {
         Schema::create('file_entries', function (Blueprint $table) {
             $table->id();
-            $table->string('filename');
+            $table->string('filepath');
             $table->boolean('active')->default(true);
-            $table->integer('processed_products')->default(0);
-            $table->integer('total_products')->default(0);
+            $table->json('website_data')->nullable();
             $table->timestamps();
         });
     }

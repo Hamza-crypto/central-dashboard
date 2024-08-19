@@ -35,11 +35,11 @@
                                         placeholder="Token">
                                 </div>
 
-                                <div class="mb-3">
+                                {{-- <div class="mb-3">
                                     <label for="token" class="form-label">Preffered Fields (Optional)</label>
                                     <input type="text" class="form-control select2" name="preffered_columns"
                                         value="{{ $website->preffered_columns }}" placeholder="Preffered columns">
-                                </div>
+                                </div> --}}
 
                             </div>
 

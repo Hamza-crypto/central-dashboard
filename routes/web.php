@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Mail;
@@ -21,6 +22,8 @@ use App\Http\Controllers\WebsiteController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::redirect('/', '/dashboard');
 
 Route::get('/dashboard', function () {
     return view('pages.dashboard.index');
@@ -100,13 +103,7 @@ Route::get('file', function () {
 
 require __DIR__.'/auth.php';
 
-
-Route::get('/', [AdminController::class, 'showUploadForm'])->name('admin.upload.form');
-Route::post('/admin/upload', [AdminController::class, 'uploadProducts'])->name('admin.upload');
-
-
-//store csv file for downloading images
-Route::post('/admin/download_images', [AdminController::class, 'download_images'])->name('admin.download');
-Route::get('/progress', [DashboardController::class, 'showProgress'])->name('admin.show.progress');
-
 Route::resource('websites', WebsiteController::class);
+Route::resource('files', FileController::class);
+
+Route::post('sync_data', [FileController::class,'sync_data'])->name('data.sync');
