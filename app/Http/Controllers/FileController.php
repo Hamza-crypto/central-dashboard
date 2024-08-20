@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\GetCategories;
-use App\Models\FileEntry;
 use App\Models\Website;
+use App\Jobs\SyncDataJob;
+use App\Models\FileEntry;
 use Illuminate\Http\Request;
+use App\Imports\GetCategories;
 use Maatwebsite\Excel\Facades\Excel;
 
 class FileController extends Controller
 {
     public function create()
     {
-        // return view('pages.files.test');
         return view('pages.files.add');
     }
 
@@ -59,9 +59,10 @@ class FileController extends Controller
         $file->website_data = $categories;
         $file->save();
 
+        // Dispatch the job
+        SyncDataJob::dispatch($file_id);
 
         return back()->with(['success' => 'Sync operation started in background']);
-
     }
 
 
