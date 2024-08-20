@@ -49,7 +49,11 @@ class FileController extends Controller
     {
         $file_id = $request->input('id');
         $categories = $request->input('categories');
+        $selected = $request->input('selected');
 
+        if(!$selected) {
+            return back()->with(['error' => 'You did not make any selection']);
+        }
         // Find the model instance
         $file = FileEntry::find($file_id);
         $file->website_data = $categories;

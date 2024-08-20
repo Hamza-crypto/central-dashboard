@@ -33,6 +33,10 @@
         <x-alert type="success">{{ session('success') }}</x-alert>
     @endif
 
+    @if (session('error'))
+        <x-alert type="error">{{ session('error') }}</x-alert>
+    @endif
+
 
     <div id="error-messages" class="alert alert-danger alert-dismissible" style="display: none;" role="alert">
         <div class="alert-message">

@@ -28,14 +28,15 @@ class SyncData extends Command
             Excel::import($import, $filePath);
             $dataToSend = $import->getFilteredRows();
 
-            $apiUrl = $ws->url . '/wp-json/custom-import/v1/import';
+            $apiUrl = $ws->url;
             Http::post($apiUrl, [
                 'data' => $dataToSend
             ]);
 
         }
 
-
+        $file->active = 0;
+        $file->save();
 
     }
 }

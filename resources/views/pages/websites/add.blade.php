@@ -45,6 +45,12 @@
                                     <input type="text" class="form-control" name="token" placeholder="Token">
                                 </div>
 
+                                <small>For wordpress based website please append the following url with website
+                                    address. <a
+                                        href="/wp-json/central-dashboard/v1/sync">/wp-json/central-dashboard/v1/sync</a></small>
+                                <hr> <small>https://example.com/wp-json/central-dashboard/v1/sync<a
+                                        href="/wp-json/central-dashboard/v1/sync"></a></small>
+
                             </div>
 
                         </div>
