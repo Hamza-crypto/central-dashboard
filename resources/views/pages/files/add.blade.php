@@ -38,12 +38,19 @@
     @endif
 
 
-    <div id="error-messages" class="alert alert-danger alert-dismissible" style="display: none;" role="alert">
-        <div class="alert-message">
-            <strong>Error!</strong> Please fix the following issues:
-            <ul></ul>
+    @if ($errors->any())
+        <div id="error-messages" class="alert alert-danger alert-dismissible" role="alert">
+            <div class="alert-message">
+                <strong>Error!</strong> Please fix the following issues:
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
         </div>
-    </div>
+    @endif
+
 
     <h1 class="h3 mb-3">Add New File</h1>
     <div class="row">
@@ -78,7 +85,7 @@
         </div>
     </div>
 
-    @if (session('websites'))
+    @if (session('id'))
         @include('pages.files.websites')
     @endif
 

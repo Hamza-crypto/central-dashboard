@@ -42,7 +42,11 @@ class FileController extends Controller
 
         $websites = Website::all();
 
-        return back()->with(['id' => $file->id, 'categories' => $categories, 'websites' => $websites]);
+        return back()->with([
+            'id' => $file->id,
+            'categories' => $categories,
+            'websites' => $websites
+        ]);
     }
 
     public function sync_data(Request $request)
@@ -62,7 +66,9 @@ class FileController extends Controller
         // Dispatch the job
         SyncDataJob::dispatch($file_id);
 
-        return back()->with(['success' => 'Sync operation started in background']);
+        return back()->with([
+            'success' => 'Sync operation started in background'
+        ]);
     }
 
 

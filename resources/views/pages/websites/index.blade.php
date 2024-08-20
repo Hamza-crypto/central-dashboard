@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('Groups'))
+@section('title', __('Websites'))
 
 @section('scripts')
     <script src="{{ asset('/assets/js/custom.js') }}"></script>

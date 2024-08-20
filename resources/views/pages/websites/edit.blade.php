@@ -11,14 +11,15 @@
 @endsection
 @section('content')
 
-    <h1 class="h3 mb-3">Add New Website</h1>
+    <h1 class="h3 mb-3">Update Website</h1>
     <div class="row">
         <div class="col-md-12 col-xl-12">
             <div class="card">
 
                 <div class="card-body">
-                    <form action="{{ route('websites.store') }}" method="POST">
+                    <form action="{{ route('websites.update', $website->id) }}" method="POST">
                         @csrf
+                        @method('PUT')
                         <div class="row">
                             <div class="col-md-8">
 
@@ -45,7 +46,7 @@
 
                         </div>
 
-                        <button type="submit" class="btn btn-primary" id="submitButton">Add New Website</button>
+                        <button type="submit" class="btn btn-primary" id="submitButton">Save</button>
                     </form>
                 </div>
 

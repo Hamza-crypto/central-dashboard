@@ -22,21 +22,16 @@ class SyncDataJob implements ShouldQueue
 
     protected $file_id;
 
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
+
     public function __construct($file_id)
     {
         $this->file_id = $file_id;
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
+
+    public $tries = 10;
+
+
     public function handle()
     {
         $file = FileEntry::find($this->file_id);
@@ -53,13 +48,12 @@ class SyncDataJob implements ShouldQueue
             if (!$ws) {
                 continue;
             }
-
             $import = new GetData($categories);
             Excel::import($import, $filePath);
             $dataToSend = $import->getFilteredRows();
 
             $apiUrl = $ws->url;
-            Http::post($apiUrl, [
+            Http::timeout(100)->post($apiUrl, [
                 'data' => $dataToSend
             ]);
         }

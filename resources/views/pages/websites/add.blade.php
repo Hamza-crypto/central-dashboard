@@ -36,7 +36,8 @@
 
                                 <div class="mb-3">
                                     <label for="name" class="form-label"> URL</label>
-                                    <input type="text" class="form-control" name="url" placeholder="Website Name">
+                                    <input type="text" class="form-control" name="url" placeholder="Website Name"
+                                        required>
                                 </div>
 
 

@@ -23,7 +23,6 @@ class WebsiteController extends Controller
 
     public function store(Request $request)
     {
-
         $data = $request->all();
 
         // Remove trailing slash from website URL (if present)
