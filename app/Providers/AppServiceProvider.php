@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
+use Spatie\Analytics\AnalyticsClient;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -11,7 +13,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        App::bind(AnalyticsClient::class, function () {
+            return new AnalyticsClient([
+                'credentials' => base_path('.env.analytics'),
+            ]);
+        });
     }
 
     /**

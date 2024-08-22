@@ -36,7 +36,7 @@
 
                                 <div class="mb-3">
                                     <label for="name" class="form-label"> URL</label>
-                                    <input type="text" class="form-control" name="url" placeholder="Website Name"
+                                    <input type="text" class="form-control" name="url" placeholder="Website address"
                                         required>
                                 </div>
 
@@ -44,6 +44,11 @@
                                 <div class="mb-3">
                                     <label for="token" class="form-label">Token (Optional)</label>
                                     <input type="text" class="form-control" name="token" placeholder="Token">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="token" class="form-label">Analytics View ID (Optional)</label>
+                                    <input type="text" class="form-control" name="view_id" placeholder="996677288">
                                 </div>
 
                                 <small>For wordpress based website please append the following url with website

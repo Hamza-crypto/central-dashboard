@@ -15,6 +15,8 @@ return new class () extends Migration {
             $table->string('url');
             $table->string('token')->nullable();
             $table->json('preffered_columns')->nullable();
+            $table->string('view_id')->nullable()->comment('Google Analytics View');
+            $table->json('stats')->nullable();
             $table->timestamps();
         });
     }

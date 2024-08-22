@@ -30,10 +30,16 @@
                                 </div>
 
 
-                                <div class="mb-3">
+                                {{-- <div class="mb-3">
                                     <label for="token" class="form-label">Token (Optional)</label>
                                     <input type="text" class="form-control" name="token" value="{{ $website->token }}"
                                         placeholder="Token">
+                                </div> --}}
+
+                                <div class="mb-3">
+                                    <label for="token" class="form-label">Analytics View ID</label>
+                                    <input type="text" class="form-control" name="view_id"
+                                        value="{{ $website->view_id }}" placeholder="996677288">
                                 </div>
 
                                 {{-- <div class="mb-3">

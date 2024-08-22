@@ -12,10 +12,13 @@ class Website extends Model
     protected $fillable = [
         'url',
         'token',
-        'preffered_columns'
+        'preffered_columns',
+        'view_id',
+        'stats',
     ];
 
     protected $casts = [
         'preferred_columns' => 'array',
+        'stats' => 'array',
     ];
 }
