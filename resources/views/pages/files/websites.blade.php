@@ -1,9 +1,3 @@
-@php
-    $categories = ['Esports', 'Casino', 'Esports Betting'];
-@endphp
-
-
-
 <div class="row">
     <div class="col-md-12 col-xl-12">
         <div class="card">
@@ -36,9 +30,8 @@
                                     <td>
                                         <select class="form-control form-select select2" data-toggle="select2"
                                             multiple="multiple" name="categories[{{ $website->id }}][]">
-                                            @foreach ($categories as $category)
-                                                <option value="{{ $category }}"
-                                                    {{ in_array($category, $website->categories ?? []) ? 'selected' : '' }}>
+                                            @foreach (session('categories') as $category)
+                                                <option value="{{ $category }}">
                                                     {{ $category }}</option>
                                             @endforeach
                                         </select>
