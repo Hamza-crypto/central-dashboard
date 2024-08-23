@@ -17,8 +17,8 @@ class CustomAnalytics extends BaseAnalytics
     {
         return $this->get(
             period: $period,
-            metrics: ['activeUsers'],
-            dimensions: ['pagePath'],
+            metrics: ['activeUsers', 'screenPageViews','bounceRate','averageSessionDuration' ],
+            dimensions: ['pagePath', 'pageTitle'],
             maxResults: $maxResults,
             orderBy: [
                 OrderBy::metric('activeUsers', true),
@@ -73,7 +73,7 @@ class CustomAnalytics extends BaseAnalytics
     {
         return $this->get(
             period: $period,
-            metrics: ['totalRevenue'],
+            metrics: ['totalRevenue', 'totalPurchasers', 'transactions'],
             dimensions: ['pagePath'],
             maxResults: $maxResults,
             orderBy: [

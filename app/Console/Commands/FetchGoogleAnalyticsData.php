@@ -27,10 +27,10 @@ class FetchGoogleAnalyticsData extends Command
 
         // Define the period and max results
         $period = Period::months(7);
-        $maxResults = 10;
+        $maxResults = 30;
 
         // Get all websites
-        $websites = Website::all();
+        $websites = Website::whereNotNull('view_id')->get();
 
         foreach ($websites as $website) {
             $this->info("Processing website: {$website->url}");
@@ -42,15 +42,6 @@ class FetchGoogleAnalyticsData extends Command
             $unique_visitors = $analytics->fetchUniqueVisitorsByPage(
                 period: $period,
                 maxResults: $maxResults
-            );
-
-            $bounce_rate = $analytics->fetchPageViewsAndBounceRate(
-                period: $period,
-                maxResults: $maxResults
-            );
-
-            $avg_session = $analytics->fetchAverageSessionDuration(
-                period: $period
             );
 
             $click_on_listings = $analytics->fetchClicksOnListing(
@@ -68,19 +59,13 @@ class FetchGoogleAnalyticsData extends Command
                 'unique_visitors' => $unique_visitors->map(function ($item) {
                     return [
                         'pagePath' => $item['pagePath'],
-                        'activeUsers' => $item['activeUsers'],
-                    ];
-                })->toArray(),
-
-                'bounce_rate' => $bounce_rate->map(function ($item) {
-                    return [
                         'pageTitle' => $item['pageTitle'],
+                        'activeUsers' => $item['activeUsers'],
                         'screenPageViews' => $item['screenPageViews'],
                         'bounceRate' => $item['bounceRate'],
+                        'averageSessionDuration' => $item['averageSessionDuration'],
                     ];
                 })->toArray(),
-
-                'avg_session' => $avg_session->first()->averageSessionDuration ?? null,
 
                 'click_on_listings' => $click_on_listings->map(function ($item) {
                     return [

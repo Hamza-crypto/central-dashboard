@@ -4,20 +4,147 @@
 
 @section('styles')
 
-
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css" />
 @endsection
 
 @section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
     <script>
         $(document).ready(function() {
+
+            function getUniqueVisitors(selectedId) {
+                $.ajax({
+                    url: '/api/stats/',
+                    method: 'POST',
+                    data: {
+                        id: selectedId,
+                        _token: '{{ csrf_token() }}' // Include CSRF token if needed
+                    },
+                    success: function(data) {
+
+                        $('#total_users').text(0.00);
+                        $('#bounce_rate').text(0.00);
+                        $('#session_duration').text(0.00);
+                        $('#total_pages').text(0.00);
+
+                        // Assuming 'data.unique_visitors' contains the data you need
+                        if (data.unique_visitors && Array.isArray(data.unique_visitors)) {
+
+                            const tableBody = $('#analytics-table-body');
+                            tableBody.empty(); // Clear existing rows
+
+                            let totalUsers = 0;
+                            let totalScreenViews = 0;
+                            let totalBounceRate = 0;
+                            let totalSessionDuration = 0;
+                            let count = 0;
+
+                            data.unique_visitors.forEach(visitor => {
+
+                                if (count >= 10) {
+                                    return false; // This works like 'break' in a .forEach loop
+                                }
+                                totalUsers += visitor.activeUsers;
+                                totalScreenViews += visitor.screenPageViews;
+                                totalBounceRate += parseFloat(visitor.bounceRate);
+                                totalSessionDuration += parseFloat(visitor
+                                    .averageSessionDuration);
+                                count++;
+
+                                const row = $('<tr>');
+
+                                // Modify pagePath
+                                let pagePath = visitor.pagePath === '/' ? 'Home Page' : visitor
+                                    .pagePath.substring(1);
+
+                                row.append(
+                                    `<td>${visitor.pageTitle} </br>${pagePath} </td>`
+                                );
+
+                                row.append(`<td class="text-end">${visitor.activeUsers}</td>`);
+                                row.append(
+                                    `<td class="">${visitor.screenPageViews}</td>`
+                                );
+                                row.append(
+                                    `<td class="">${parseFloat(visitor.bounceRate * 100).toFixed(2)}</td>`
+                                );
+                                row.append(
+                                    `<td class="">${parseFloat(visitor.averageSessionDuration).toFixed(2)}</td>`
+                                );
+
+                                tableBody.append(row);
+
+                            });
+
+                            // Calculate averages
+                            const averageBounceRate = (totalBounceRate / count) *
+                                100; // Convert to percentage
+                            const averageSessionDuration = totalSessionDuration / count;
+                            // Convert session duration to minutes and format it
+                            let sessionDurationMinutes = (averageSessionDuration / 60).toFixed(2);
+
+                            $('#total_users').text(totalUsers);
+                            $('#bounce_rate').text(parseFloat(averageBounceRate).toFixed(2) + '%');
+                            $('#session_duration').text(parseFloat(averageSessionDuration).toFixed(2));
+                            $('#total_pages').text(totalScreenViews);
+
+                        } else {
+                            $('#data-result').html('<p>No visitor data available.</p>');
+                        }
+
+
+                        if (data.click_on_listings && Array.isArray(data.click_on_listings)) {
+
+                            const tableBodyClicks = $('#clicks-table-body');
+                            tableBodyClicks.empty(); // Clear existing rows
+
+
+                            data.click_on_listings.forEach(listing => {
+
+                                const row = $('<tr>');
+
+                                // Modify pagePath for home page
+                                let pagePath = listing.pagePath === '/' ? 'Home Page' : listing
+                                    .pagePath.substring(1);
+
+                                row.append(
+                                    `<td class="d-xl-table-cell text-end">${pagePath}</td>`);
+                                row.append(
+                                    `<td class="d-xl-table-cell text-end">${listing.eventCount}</td>`
+                                );
+                                row.append(
+                                    `<td class="d-xl-table-cell text-end">${parseFloat(listing.eventCountPerUser).toFixed(2)}</td>`
+                                );
+
+                                tableBodyClicks.append(row);
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 404) {
+                            $('#data-result').html('<p>Data not found.</p>');
+                        } else {
+                            $('#data-result').html('<p>An error occurred.</p>');
+                        }
+                    }
+                });
+            };
+
+            // Trigger data fetch when the page loads
+            var initialId = $('#website').find('option:first').val();
+            if (initialId) {
+                getUniqueVisitors(initialId);
+            }
+
             $('.select2').select2();
 
             $('#website').on('change', function() {
                 var selectedId = $(this).val();
-                console.log('Selected ID:', selectedId);
-                // You can now use selectedId for further actions
+                getUniqueVisitors(selectedId);
             });
+
+            //$('#analytics-table').DataTable();
 
         });
     </script>
@@ -27,150 +154,9 @@
 
 
     <h1>Dashboard Stats</h1>
-    <div class="row">
-        <div class="col-md-12 col-xl-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5>Select website to see particular stats</h5>
-                </div>
-                <div class="card-body">
-                    <select class="form-control form-select select2" data-toggle="select2" name="website" id="website">
-                        @foreach ($websites as $website)
-                            <option value="{{ $website->id }}">
-                                {{ $website->url }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-lg-6 col-xl-12 d-flex">
-            <div class="w-100">
-
-                <div class="row">
-                    <div class="col-sm-6 col-lg-12 col-xxl-6 d-flex">
-                        <div class="card illustration flex-fill">
-                            <div class="card-body p-0 d-flex flex-fill">
-                                <div class="row g-0 w-100">
-                                    <div class="col-6">
-                                        <div class="illustration-text p-3 m-1">
-                                            <h4 class="illustration-text">Welcome Back, Chris!</h4>
-                                            <p class="mb-0">AppStack Dashboard</p>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-12 col-xxl-6 d-flex">
-                        <div class="card flex-fill">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col mt-0">
-                                        <h5 class="card-title">Bounce</h5>
-                                    </div>
-
-                                    <div class="col-auto">
-                                        <div class="stat stat-sm">
-                                            <i class="align-middle" data-feather="arrow-up-right"></i>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <span class="h1 d-inline-block mt-1 mb-4">2.364</span>
-                                <div class="mb-0">
-                                    <span class="badge badge-subtle-success me-2"> +3.65% </span>
-                                    <span class="text-muted">Since last week</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-12 col-xxl-6 d-flex">
-                        <div class="card flex-fill">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col mt-0">
-                                        <h5 class="card-title">Real-Time</h5>
-                                    </div>
-
-                                    <div class="col-auto">
-                                        <div class="stat stat-sm">
-                                            <i class="align-middle" data-feather="clock"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <span class="h1 d-inline-block mt-1 mb-4">1.856</span>
-                                <div class="mb-0">
-                                    <span class="badge badge-subtle-success me-2"> +2.25% </span>
-                                    <span class="text-muted">Since last week</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-12 col-xxl-6 d-flex">
-                        <div class="card flex-fill">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col mt-0">
-                                        <h5 class="card-title">Visitors</h5>
-                                    </div>
-
-                                    <div class="col-auto">
-                                        <div class="stat stat-sm">
-                                            <i class="align-middle" data-feather="users"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <span class="h1 d-inline-block mt-1 mb-4">17.212</span>
-                                <div class="mb-0">
-                                    <span class="badge badge-subtle-danger me-2"> -1.25% </span>
-                                    <span class="text-muted">Since last week</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-        </div>
-
-    </div>
-
-
-    <h2>Unique Visitors</h2>
-    <ul>
-        @foreach ($stats['unique_visitors'] as $visitor)
-            <li>{{ $visitor['pagePath'] }}: {{ $visitor['activeUsers'] }} active users</li>
-        @endforeach
-    </ul>
-
-    <h2>Bounce Rate</h2>
-    <ul>
-        @foreach ($stats['bounce_rate'] as $rate)
-            <li>{{ $rate['pageTitle'] }}: {{ $rate['screenPageViews'] }} views, Bounce Rate: {{ $rate['bounceRate'] }}</li>
-        @endforeach
-    </ul>
-
-    <h2>Average Session Duration</h2>
-    <p>{{ $stats['avg_session'] }} seconds</p>
-
-    <h2>Clicks on Listings</h2>
-    <ul>
-        @foreach ($stats['click_on_listings'] as $click)
-            <li>{{ $click['pagePath'] }}: {{ $click['eventCount'] }} clicks</li>
-        @endforeach
-    </ul>
-
-    <h2>Revenue Per Site</h2>
-    <ul>
-        @foreach ($stats['revenue_per_site'] as $revenue)
-            <li>{{ $revenue['pagePath'] }}: {{ $revenue['eventCount'] }} events</li>
-        @endforeach
-    </ul>
+    @include('pages.dashboard._inc.stats')
+    @include('pages.dashboard._inc.unique_visitors')
+    @include('pages.dashboard._inc.clicks_on_listings')
 
 @endsection
