@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Website;
 use App\Jobs\SyncDataJob;
-use App\Models\FileEntry;
+use App\Models\File;
 use Illuminate\Http\Request;
 use App\Imports\GetCategories;
 use Maatwebsite\Excel\Facades\Excel;
@@ -25,8 +25,12 @@ class FileController extends Controller
         $file = $request->file('file');
         $filePath = $file->store('uploads');
 
-        $file = FileEntry::create([
-            'filepath' => $filePath
+        // Get the original filename
+        $fileName = $file->getClientOriginalName();
+
+        $file = File::create([
+            'name' => $fileName,
+            'filepath' => $file
         ]);
 
         // $filePath = "uploads/nlGiFGKcu61iTVqjXf5pqTwvfU97H5Bv4T9gdeeK.xlsx";
@@ -53,15 +57,17 @@ class FileController extends Controller
     {
         $file_id = $request->input('id');
         $categories = $request->input('categories');
-        $selected = $request->input('selected');
+        $selectedWebsites = $request->input('selected');
 
-        if(!$selected) {
+        if(!$selectedWebsites) {
             return back()->with(['error' => 'You did not make any selection']);
         }
         // Find the model instance
-        $file = FileEntry::find($file_id);
+        $file = File::find($file_id);
         $file->website_data = $categories;
         $file->save();
+
+        $file->websites()->attach($selectedWebsites);
 
         // Dispatch the job
         SyncDataJob::dispatch($file_id);

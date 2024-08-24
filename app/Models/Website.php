@@ -19,6 +19,11 @@ class Website extends Model
 
     protected $casts = [
         'preferred_columns' => 'array',
-        'stats' => 'array',
+        'stats' => 'array'
     ];
+
+    public function files()
+    {
+        return $this->belongsToMany(FileEntry::class, 'file_website')->withTimestamps();
+    }
 }

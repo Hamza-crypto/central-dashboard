@@ -231,3 +231,13 @@ Route::get('store-analytics', function () {
 
 
 });
+
+
+/**
+ * To Get Started
+ * Wordpress:
+ *
+* http://localhost/unused-images/wp-admin/edit.php?post_status=trash&post_type=wecptbs
+* DELETE FROM `wp_postmeta` where post_id > 22540;
+* DELETE FROM `wp_posts` where id > 22540
+ */

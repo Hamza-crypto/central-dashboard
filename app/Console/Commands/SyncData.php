@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Imports\GetData;
-use App\Models\FileEntry;
+use App\Models\File;
 use App\Models\Website;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
@@ -17,7 +17,7 @@ class SyncData extends Command
 
     public function handle()
     {
-        $file = FileEntry::where('active', 1)->first();
+        $file = File::first();
         $websites = $file->website_data;
         $filePath = storage_path('app/' . $file->filepath);
 

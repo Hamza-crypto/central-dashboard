@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FileEntry extends Model
+class File extends Model
 {
     use HasFactory;
 
@@ -14,6 +14,11 @@ class FileEntry extends Model
     protected $casts = [
         'website_data' => 'array',
     ];
+
+    public function websites()
+    {
+        return $this->belongsToMany(Website::class, 'file_website')->withTimestamps();
+    }
 
     public function getWebsiteDataAttribute($value)
     {
