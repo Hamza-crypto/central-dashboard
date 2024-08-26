@@ -9,7 +9,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $websites = Website::whereNotNull('stats')->get();
+        $websites = Website::whereNotNull('stats_12mo')->get();
         return view('pages.dashboard.index', compact('websites'));
     }
 

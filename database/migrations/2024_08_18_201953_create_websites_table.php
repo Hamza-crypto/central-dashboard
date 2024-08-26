@@ -16,7 +16,16 @@ return new class () extends Migration {
             $table->string('token')->nullable();
             $table->json('preffered_columns')->nullable();
             $table->string('view_id')->nullable()->comment('Google Analytics View');
-            $table->json('stats')->nullable();
+
+            // Add columns for different periods
+            $table->json('stats_1h')->nullable();
+            $table->json('stats_1d')->nullable();
+            $table->json('stats_1w')->nullable();
+            $table->json('stats_1mo')->nullable();
+            $table->json('stats_3mo')->nullable();
+            $table->json('stats_6mo')->nullable();
+            $table->json('stats_12mo')->nullable();
+
             $table->timestamps();
         });
     }

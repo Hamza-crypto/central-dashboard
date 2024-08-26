@@ -125,6 +125,7 @@ Route::get('sync', function () {
 
 Route::get('fetch-analytics', function () {
     Artisan::call('analytics:fetch');
+    Artisan::call('analytics:fetch-hourly');
 });
 
 

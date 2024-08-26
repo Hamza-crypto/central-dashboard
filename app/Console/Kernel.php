@@ -15,6 +15,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('telescope:prune --hours=48')->daily();
         // $schedule->command('sync-excel')->everyMinute();
         $schedule->command('delete:unused-entries')->everyTwoHours();
+        $schedule->command('analytics:fetch-hourly')->hourly();
+        $schedule->command('analytics:fetch')->daily();
     }
 
     /**

@@ -9,13 +9,7 @@ class Website extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'url',
-        'token',
-        'preffered_columns',
-        'view_id',
-        'stats',
-    ];
+    protected $guarded = [];
 
     protected $casts = [
         'preferred_columns' => 'array',
@@ -24,6 +18,6 @@ class Website extends Model
 
     public function files()
     {
-        return $this->belongsToMany(FileEntry::class, 'file_website')->withTimestamps();
+        return $this->belongsToMany(File::class, 'file_website')->withTimestamps();
     }
 }
