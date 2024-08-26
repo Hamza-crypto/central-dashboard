@@ -3,14 +3,14 @@
         <div class="card">
 
             <div class="card-body">
-                <label>File Upload History</label>
+                <label>File Upload History (Most recent on the top)</label>
 
                 <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>File Name</th>
-                            <th>Websites</th>
+                            <th>Website(s)</th>
                             <th>Uploaded Date</th>
                         </tr>
                     </thead>
@@ -27,7 +27,7 @@
                                         @endforeach
                                     </ul>
                                 </td>
-                                <td>{{ $file->created_at }}</td>
+                                <td>{{ $file->created_at }} ( {{ $file->created_at->diffForHumans() }} )</td>
                             </tr>
                         @endforeach
                     </tbody>

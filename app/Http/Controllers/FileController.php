@@ -13,7 +13,7 @@ class FileController extends Controller
 {
     public function create()
     {
-        $files = File::with('websites')->has('websites')->get();
+        $files = File::with('websites')->has('websites')->latest()->limit(5)->get();
         return view('pages.files.add', compact('files'));
     }
 
