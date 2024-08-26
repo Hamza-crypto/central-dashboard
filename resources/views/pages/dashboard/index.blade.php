@@ -4,12 +4,15 @@
 
 @section('styles')
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
+    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css" /> --}}
+    <script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
+
 @endsection
 
 @section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
+
     <script>
         $(document).ready(function() {
 
@@ -46,9 +49,9 @@
 
                             data.unique_visitors.forEach(visitor => {
 
-                                if (count >= 10) {
-                                    return false; // This works like 'break' in a .forEach loop
-                                }
+                                // if (count >= 10) {
+                                //     return false; // This works like 'break' in a .forEach loop
+                                // }
                                 totalUsers += visitor.activeUsers;
                                 totalScreenViews += visitor.screenPageViews;
                                 totalBounceRate += parseFloat(visitor.bounceRate);
@@ -95,6 +98,24 @@
                             $('#session_duration').text(parseFloat(averageSessionDuration).toFixed(2));
                             $('#total_pages').text(totalScreenViews);
 
+
+                            // Destroy the existing DataTable instance if it exists
+                            if ($.fn.DataTable.isDataTable('#analytics-table')) {
+                                $('#analytics-table').DataTable().clear().destroy();
+                            }
+                            $('#analytics-table').DataTable({
+                                "pageLength": 10, // Display only 10 records by default
+                                "order": [
+                                    [1, 'desc']
+                                ], // Default sorting on the first column
+                                "columnDefs": [{
+                                        "type": "num",
+                                        "targets": [1, 2, 3, 4]
+                                    }, // Sort the 2nd and 3rd columns as integers
+                                ],
+                            });
+
+
                         } else {
                             $(tableBody).html(
                                 '<td colspan="5" style="text-align: center;">No visitor data available.</td>'
@@ -127,6 +148,22 @@
 
                                 tableBodyClicks.append(row);
                             });
+
+                            // Destroy the existing DataTable instance if it exists
+                            if ($.fn.DataTable.isDataTable('#clicks-table')) {
+                                $('#clicks-table').DataTable().clear().destroy();
+                            }
+                            $('#clicks-table').DataTable({
+                                "pageLength": 10, // Display only 10 records by default
+                                "order": [
+                                    [1, 'desc']
+                                ], // Default sorting on the first column
+                                "columnDefs": [{
+                                        "type": "num",
+                                        "targets": [1, 2]
+                                    }, // Sort the 2nd and 3rd columns as integers
+                                ],
+                            });
                         } else {
                             $(tableBodyClicks).html(
                                 '<td colspan="5" style="text-align: center;">No clicks data available.</td>'
@@ -145,9 +182,11 @@
 
             // Trigger data fetch when the page loads
             var initialId = $('#website').find('option:first').val();
+            var selectedPeriod = $('#period').find('option:last').val();
             if (initialId) {
-                getUniqueVisitors(initialId);
+                getUniqueVisitors(initialId, selectedPeriod);
             }
+
 
             $('.select2').select2();
 
@@ -156,10 +195,6 @@
                 var selectedPeriod = $('#period').val();
                 getUniqueVisitors(selectedWebsiteId, selectedPeriod);
             });
-
-
-
-            //$('#analytics-table').DataTable();
 
         });
     </script>

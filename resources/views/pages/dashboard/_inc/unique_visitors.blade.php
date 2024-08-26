@@ -2,7 +2,7 @@
      <div class="col-sm-6 col-lg-12 col-xxl-12 d-flex">
          <div class="card flex-fill">
              <div class="card-header">
-                 <h5 class="card-title mb-0">Unique Visitors (Data is based on past 3 months)</h5>
+                 <h5 class="card-title mb-0">Unique Visitors</h5>
              </div>
              <div class="card-body">
                  <table class="table table-striped my-0 responsive" id="analytics-table">
@@ -13,7 +13,6 @@
                              <th>Screen Views</th>
                              <th>Bounce Rate %</th>
                              <th>Avg. Session Duration (seconds)</th>
-
                          </tr>
                      </thead>
                      <tbody id="analytics-table-body">

@@ -5,7 +5,7 @@
                   <h5 class="card-title mb-0">Clicks On Listings</h5>
               </div>
               <div class="card-body">
-                  <table class="table table-striped my-0 ">
+                  <table class="table table-striped my-0 responsive" id="clicks-table">
                       <thead>
                           <tr>
                               <th class="d-xl-table-cell text-end">URL</th>

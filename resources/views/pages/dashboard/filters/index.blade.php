@@ -28,7 +28,7 @@
                             <option value="1mo">Last 1 Month</option>
                             <option value="3mo">Last 3 Months</option>
                             <option value="6mo">Last 6 Months</option>
-                            <option value="12mo">Last 12 Months</option>
+                            <option value="12mo" selected>Last 12 Months</option>
                         </select>
                     </div>
                 </div>
