@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Artisan;
 
 class Website extends Model
 {
@@ -25,5 +26,40 @@ class Website extends Model
     public function files()
     {
         return $this->belongsToMany(File::class, 'file_website')->withTimestamps();
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($website) {
+            // Check if the view_id is filled
+            if (!empty($website->view_id)) {
+
+
+                Artisan::call('analytics:fetch', [
+                                    'website_id' => $website->id
+                                ]);
+
+                Artisan::call('analytics:fetch-hourly', [
+                    'website_id' => $website->id
+                ]);
+
+            }
+        });
+
+        static::updated(function ($website) {
+            // Check if the view_id is filled
+            if (!empty($website->view_id) && $website->isDirty('view_id')) {
+
+                Artisan::call('analytics:fetch', [
+                                    'website_id' => $website->id
+                                ]);
+
+                Artisan::call('analytics:fetch-hourly', [
+                    'website_id' => $website->id
+                ]);
+
+            }
+
+        });
     }
 }

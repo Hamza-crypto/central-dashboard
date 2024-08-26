@@ -2,30 +2,28 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\FetchAnalyticsData;
-use App\Models\Website;
+use App\Services\AnalyticsDataFetcherService;
 use Illuminate\Console\Command;
-use Spatie\Analytics\AnalyticsClient;
 use Spatie\Analytics\Period;
 
 class FetchGoogleAnalyticsDataCommand extends Command
 {
-    protected $signature = 'analytics:fetch';
+    protected $signature = 'analytics:fetch {website_id?}';
     protected $description = 'Fetch Google Analytics data for all websites and store in the database';
 
-    protected $analyticsClient;
+    protected $dataFetcher;
 
-    public function __construct(AnalyticsClient $client)
+    public function __construct(AnalyticsDataFetcherService $dataFetcher)
     {
         parent::__construct();
-        $this->analyticsClient = $client;
+        $this->dataFetcher = $dataFetcher;
     }
 
     public function handle()
     {
+        $website_id = $this->argument('website_id');
         $this->info('Fetching Google Analytics data...');
 
-        // Define the periods
         $periods = [
             '1d' => Period::days(1),
             '1w' => Period::days(7),
@@ -35,17 +33,9 @@ class FetchGoogleAnalyticsDataCommand extends Command
             '12mo' => Period::years(1),
         ];
 
-        $websites = Website::whereNotNull('view_id')->get();
-
-        foreach ($websites as $website) {
-            foreach ($periods as $tbl_key => $period) {
-                FetchAnalyticsData::dispatch($website->id, $period, $tbl_key);
-            }
-        }
+        $this->dataFetcher->fetchAndDispatchJobs($periods, $website_id);
 
         $this->info('Jobs dispatched successfully.');
-
-
     }
 
 }
