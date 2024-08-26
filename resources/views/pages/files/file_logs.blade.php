@@ -39,7 +39,7 @@
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger mt-3">
-                            Delete All Files
+                            Clear History
                         </button>
                     </form>
                 </div>
