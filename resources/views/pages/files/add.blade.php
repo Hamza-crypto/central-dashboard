@@ -88,5 +88,5 @@
     @if (session('id'))
         @include('pages.files.websites')
     @endif
-
+    @include('pages.files.file_logs')
 @endsection

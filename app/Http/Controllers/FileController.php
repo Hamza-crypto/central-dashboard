@@ -13,7 +13,8 @@ class FileController extends Controller
 {
     public function create()
     {
-        return view('pages.files.add');
+        $files = File::with('websites')->has('websites')->get();
+        return view('pages.files.add', compact('files'));
     }
 
     public function store(Request $request)
@@ -30,7 +31,7 @@ class FileController extends Controller
 
         $file = File::create([
             'name' => $fileName,
-            'filepath' => $file
+            'filepath' => $filePath
         ]);
 
         // $filePath = "uploads/nlGiFGKcu61iTVqjXf5pqTwvfU97H5Bv4T9gdeeK.xlsx";
@@ -76,8 +77,5 @@ class FileController extends Controller
             'success' => 'Sync operation started in background'
         ]);
     }
-
-
-
 
 }
