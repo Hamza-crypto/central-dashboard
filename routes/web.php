@@ -109,6 +109,7 @@ Route::get('file', function () {
 
 require __DIR__.'/auth.php';
 
+Route::delete('/files/delete-all', [FileController::class, 'deleteAll'])->name('files.deleteAll');
 Route::resource('websites', WebsiteController::class);
 Route::resource('files', FileController::class);
 

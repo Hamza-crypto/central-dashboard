@@ -33,7 +33,11 @@
                         $('#total_pages').text(0.00);
 
                         const tableBody = $('#analytics-table-body');
-                        tableBody.empty(); // Clear existing rows
+
+                        // Destroy the existing DataTable instance if it exists
+                        if ($.fn.DataTable.isDataTable('#analytics-table')) {
+                            $('#analytics-table').DataTable().clear().destroy();
+                        }
 
                         // Assuming 'data.unique_visitors' contains the data you need
                         if (data.unique_visitors && Array.isArray(data.unique_visitors)) {
@@ -99,12 +103,7 @@
                             $('#total_pages').text(totalScreenViews);
 
 
-                            // Destroy the existing DataTable instance if it exists
-                            if ($.fn.DataTable.isDataTable('#analytics-table')) {
-                                $('#analytics-table').DataTable().clear().destroy();
-                            }
                             $('#analytics-table').DataTable({
-                                "pageLength": 10, // Display only 10 records by default
                                 "order": [
                                     [1, 'desc']
                                 ], // Default sorting on the first column
@@ -124,7 +123,11 @@
 
 
                         const tableBodyClicks = $('#clicks-table-body');
-                        tableBodyClicks.empty(); // Clear existing rows
+
+                        if ($.fn.DataTable.isDataTable('#clicks-table')) {
+                            $('#clicks-table').DataTable().clear().destroy();
+                        }
+
                         if (data.click_on_listings && Array.isArray(data.click_on_listings)) {
 
                             data.click_on_listings.forEach(listing => {
@@ -150,9 +153,7 @@
                             });
 
                             // Destroy the existing DataTable instance if it exists
-                            if ($.fn.DataTable.isDataTable('#clicks-table')) {
-                                $('#clicks-table').DataTable().clear().destroy();
-                            }
+
                             $('#clicks-table').DataTable({
                                 "pageLength": 10, // Display only 10 records by default
                                 "order": [

@@ -78,4 +78,9 @@ class FileController extends Controller
         ]);
     }
 
+    public function deleteAll()
+    {
+        \DB::table('file_website')->truncate();
+        return redirect()->back()->with('success', 'History cleared successfully.');
+    }
 }
