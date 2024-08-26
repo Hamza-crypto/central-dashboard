@@ -13,12 +13,13 @@
     <script>
         $(document).ready(function() {
 
-            function getUniqueVisitors(selectedId) {
+            function getUniqueVisitors(selectedWebsiteId, _period) {
                 $.ajax({
                     url: '/api/stats/',
                     method: 'POST',
                     data: {
-                        id: selectedId,
+                        website_id: selectedWebsiteId,
+                        period: _period,
                         _token: '{{ csrf_token() }}' // Include CSRF token if needed
                     },
                     success: function(data) {
@@ -28,17 +29,20 @@
                         $('#session_duration').text(0.00);
                         $('#total_pages').text(0.00);
 
+                        const tableBody = $('#analytics-table-body');
+                        tableBody.empty(); // Clear existing rows
+
                         // Assuming 'data.unique_visitors' contains the data you need
                         if (data.unique_visitors && Array.isArray(data.unique_visitors)) {
-
-                            const tableBody = $('#analytics-table-body');
-                            tableBody.empty(); // Clear existing rows
 
                             let totalUsers = 0;
                             let totalScreenViews = 0;
                             let totalBounceRate = 0;
                             let totalSessionDuration = 0;
                             let count = 0;
+                            let averageBounceRate = 0;
+                            let averageSessionDuration = 0;
+
 
                             data.unique_visitors.forEach(visitor => {
 
@@ -77,12 +81,14 @@
 
                             });
 
-                            // Calculate averages
-                            const averageBounceRate = (totalBounceRate / count) *
-                                100; // Convert to percentage
-                            const averageSessionDuration = totalSessionDuration / count;
-                            // Convert session duration to minutes and format it
-                            let sessionDurationMinutes = (averageSessionDuration / 60).toFixed(2);
+                            if (count) {
+                                // Calculate averages
+                                averageBounceRate = (totalBounceRate / count) *
+                                    100; // Convert to percentage
+                                averageSessionDuration = totalSessionDuration / count;
+                                // Convert session duration to minutes and format it
+                                //sessionDurationMinutes = (averageSessionDuration / 60).toFixed(2);
+                            }
 
                             $('#total_users').text(totalUsers);
                             $('#bounce_rate').text(parseFloat(averageBounceRate).toFixed(2) + '%');
@@ -90,26 +96,28 @@
                             $('#total_pages').text(totalScreenViews);
 
                         } else {
-                            $('#data-result').html('<p>No visitor data available.</p>');
+                            $(tableBody).html(
+                                '<td colspan="5" style="text-align: center;">No visitor data available.</td>'
+                            );
                         }
 
 
+                        const tableBodyClicks = $('#clicks-table-body');
+                        tableBodyClicks.empty(); // Clear existing rows
                         if (data.click_on_listings && Array.isArray(data.click_on_listings)) {
-
-                            const tableBodyClicks = $('#clicks-table-body');
-                            tableBodyClicks.empty(); // Clear existing rows
-
 
                             data.click_on_listings.forEach(listing => {
 
                                 const row = $('<tr>');
 
                                 // Modify pagePath for home page
-                                let pagePath = listing.pagePath === '/' ? 'Home Page' : listing
+                                let pagePath = listing.pagePath === '/' ? 'Home Page' :
+                                    listing
                                     .pagePath.substring(1);
 
                                 row.append(
-                                    `<td class="d-xl-table-cell text-end">${pagePath}</td>`);
+                                    `<td class="d-xl-table-cell text-end">${pagePath}</td>`
+                                );
                                 row.append(
                                     `<td class="d-xl-table-cell text-end">${listing.eventCount}</td>`
                                 );
@@ -119,6 +127,10 @@
 
                                 tableBodyClicks.append(row);
                             });
+                        } else {
+                            $(tableBodyClicks).html(
+                                '<td colspan="5" style="text-align: center;">No clicks data available.</td>'
+                            );
                         }
                     },
                     error: function(xhr) {
@@ -139,10 +151,13 @@
 
             $('.select2').select2();
 
-            $('#website').on('change', function() {
-                var selectedId = $(this).val();
-                getUniqueVisitors(selectedId);
+            $('#submit_btn').on('click', function() {
+                var selectedWebsiteId = $('#website').val();
+                var selectedPeriod = $('#period').val();
+                getUniqueVisitors(selectedWebsiteId, selectedPeriod);
             });
+
+
 
             //$('#analytics-table').DataTable();
 
@@ -155,6 +170,7 @@
 
     <h1>Dashboard Stats</h1>
 
+    @include('pages.dashboard.filters.index')
     @include('pages.dashboard._inc.stats')
     @include('pages.dashboard._inc.unique_visitors')
     @include('pages.dashboard._inc.clicks_on_listings')

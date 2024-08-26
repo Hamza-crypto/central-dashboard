@@ -1,22 +1,4 @@
 <div class="row">
-    <div class="col-md-12 col-xl-12">
-        <div class="card">
-            <div class="card-header">
-                <h5>Select website to see particular stats</h5>
-            </div>
-            <div class="card-body">
-                <select class="form-control form-select select2" data-toggle="select2" name="website" id="website">
-                    @foreach ($websites as $website)
-                        <option value="{{ $website->id }}">
-                            {{ $website->url }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
     <div class="col-lg-6 col-xl-12 d-flex">
         <div class="w-100">
 

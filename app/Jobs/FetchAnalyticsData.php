@@ -49,13 +49,26 @@ class FetchAnalyticsData implements ShouldQueue
     protected function fetchStats(CustomAnalytics $analytics, $period)
     {
         $maxResults = 30;
-        // Fetch data and prepare stats as in your previous example
-        // Implement fetchUniqueVisitorsByPage, fetchClicksOnListing, fetchRevenuePerSite
-        return [
-            'unique_visitors' => $analytics->fetchUniqueVisitorsByPage(
-                period: $period,
-                maxResults: $maxResults
-            )->map(function ($item) {
+
+        // Fetch data
+        $unique_visitors = $analytics->fetchUniqueVisitorsByPage(
+            period: $period,
+            maxResults: $maxResults
+        );
+
+        $click_on_listings = $analytics->fetchClicksOnListing(
+            period: $period,
+            maxResults: $maxResults
+        );
+
+        $revenue_per_site = $analytics->fetchRevenuePerSite(
+            period: $period,
+            maxResults: $maxResults
+        );
+
+        // Prepare the stats data
+        $stats = [
+            'unique_visitors' => $unique_visitors->map(function ($item) {
                 return [
                     'pagePath' => $item['pagePath'],
                     'pageTitle' => $item['pageTitle'],
@@ -65,7 +78,24 @@ class FetchAnalyticsData implements ShouldQueue
                     'averageSessionDuration' => $item['averageSessionDuration'],
                 ];
             })->toArray(),
-            // Add other data fetching methods here
+
+            'click_on_listings' => $click_on_listings->map(function ($item) {
+                return [
+                    'pagePath' => $item['pagePath'],
+                    'eventCount' => $item['eventCount'],
+                    'eventCountPerUser' => $item['eventCountPerUser'],
+                ];
+            })->toArray(),
+
+            'revenue_per_site' => $revenue_per_site->map(function ($item) {
+                return [
+                    'pagePath' => $item['pagePath'],
+                    'eventCount' => $item['eventCount'],
+                    'eventCountPerUser' => $item['eventCountPerUser'],
+                ];
+            })->toArray(),
         ];
+
+        return $stats;
     }
 }

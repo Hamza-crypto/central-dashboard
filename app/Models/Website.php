@@ -13,8 +13,14 @@ class Website extends Model
 
     protected $casts = [
         'preferred_columns' => 'array',
-        'stats' => 'array'
-    ];
+        'stats_1h' => 'array',
+        'stats_1d' => 'array',
+        'stats_1w' => 'array',
+        'stats_1mo' => 'array',
+        'stats_3mo' => 'array',
+        'stats_6mo' => 'array',
+        'stats_12mo' => 'array'
+];
 
     public function files()
     {

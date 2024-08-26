@@ -27,10 +27,10 @@ class FetchGoogleAnalyticsDataCommand extends Command
 
         // Define the periods
         $periods = [
-            // '1d' => Period::days(1),
-            // '1w' => Period::days(7),
-            // '1mo' => Period::months(1),
-            // '3mo' => Period::months(3),
+            '1d' => Period::days(1),
+            '1w' => Period::days(7),
+            '1mo' => Period::months(1),
+            '3mo' => Period::months(3),
             '6mo' => Period::months(6),
             '12mo' => Period::years(1),
         ];
