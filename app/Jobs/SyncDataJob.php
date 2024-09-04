@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\FileEntry;
+use App\Models\File;
 use App\Models\Website;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -34,7 +34,7 @@ class SyncDataJob implements ShouldQueue
 
     public function handle()
     {
-        $file = FileEntry::find($this->file_id);
+        $file = File::find($this->file_id);
         if (!$file) {
             return;
         }
