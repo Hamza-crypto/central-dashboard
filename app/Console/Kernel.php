@@ -12,6 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        $schedule->command('inspire')->everyMinute();
         $schedule->command('telescope:prune --hours=48')->daily();
         // $schedule->command('sync-excel')->everyMinute();
         $schedule->command('delete:unused-entries')->everyTwoHours();
