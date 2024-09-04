@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AdminController;
+
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
@@ -42,14 +42,13 @@ Route::middleware('auth')->group(function () {
 
 
 
-Route::get('migrate_fresh', function () {
-    Artisan::call('migrate:fresh');
-    dump('Database Reset Successfully');
-});
+// Route::get('migrate_fresh', function () {
+//     Artisan::call('migrate:fresh');
+//     dump('Database Reset Successfully');
+// });
 
 
 Route::get('migrate', function () {
-
     Artisan::call('migrate');
     dump('Migration Done');
 });
@@ -58,11 +57,6 @@ Route::get('migrate', function () {
 Route::get('optimize', function () {
     Artisan::call('optimize:clear');
     dump('Optimization Done');
-});
-
-
-Route::get('phpinfo', function () {
-    echo phpinfo();
 });
 
 
@@ -77,41 +71,6 @@ Route::get('storage-link', function () {
 });
 
 
-
-Route::get('file', function () {
-
-    // Generate CSV file
-    $fileName = 'selected_products_1718463081'  . '.csv';
-    $filePath = 'attachments/' . $fileName;
-
-
-    $url = Storage::disk('public')->url($filePath);
-    dd($url);
-    // Generate CSV file
-    $fileName = 'selected_products_' . now()->timestamp . '.csv';
-    $filePath = 'attachments/' . $fileName;
-
-    // Add CSV headers and data
-    $csvData = [];
-    $csvData[] = ['Title', 'Price', 'Quantity', 'SKU'];
-
-
-    $csv = '';
-    foreach ($csvData as $row) {
-        $csv .= implode(',', $row) . "\n";
-    }
-
-
-    // Store the CSV file in the public disk
-    Storage::disk('public')->put($filePath, $csv);
-
-    // Generate the download link
-    $downloadLink = Storage::disk('public')->url($filePath);
-    dd($downloadLink);
-});
-
-
-
 require __DIR__.'/auth.php';
 
 Route::delete('/files/delete-all', [FileController::class, 'deleteAll'])->name('files.deleteAll');
@@ -123,7 +82,6 @@ Route::post('sync_data', [FileController::class,'sync_data'])->name('data.sync')
 
 
 Route::get('sync', function () {
-
     Artisan::call('sync:wordpress-laravel');
 
 });

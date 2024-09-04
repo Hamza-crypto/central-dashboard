@@ -57,8 +57,5 @@ class SyncDataJob implements ShouldQueue
                 'data' => $dataToSend
             ]);
         }
-
-        $file->active = 0;
-        $file->save();
     }
 }
