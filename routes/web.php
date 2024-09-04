@@ -13,7 +13,6 @@ use App\Http\Controllers\MeterReadingController;
 use App\Http\Controllers\WebsiteController;
 use App\Models\Website;
 use Spatie\Analytics\Facades\Analytics;
-
 use Spatie\Analytics\AnalyticsClient;
 use Spatie\Analytics\Period;
 use App\Services\CustomAnalytics;
@@ -60,6 +59,12 @@ Route::get('optimize', function () {
     Artisan::call('optimize:clear');
     dump('Optimization Done');
 });
+
+
+Route::get('phpinfo', function () {
+    echo phpinfo();
+});
+
 
 Route::get('storage-link', function () {
     $target = storage_path('app/public');
