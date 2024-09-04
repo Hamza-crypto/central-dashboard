@@ -18,7 +18,7 @@
 
             function getUniqueVisitors(selectedWebsiteId, _period) {
                 $.ajax({
-                    url: '/api/stats/',
+                    url: '/api/stats',
                     method: 'POST',
                     data: {
                         website_id: selectedWebsiteId,
