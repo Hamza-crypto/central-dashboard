@@ -42,10 +42,10 @@ Route::middleware('auth')->group(function () {
 
 
 
-// Route::get('migrate_fresh', function () {
-//     Artisan::call('migrate:fresh');
-//     dump('Database Reset Successfully');
-// });
+Route::get('migrate_fresh', function () {
+    Artisan::call('migrate:fresh');
+    dump('Database Reset Successfully');
+});
 
 
 Route::get('migrate', function () {
