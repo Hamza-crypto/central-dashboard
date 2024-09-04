@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('delete:unused-entries')->everyTwoHours();
         $schedule->command('analytics:fetch-hourly')->hourly();
         $schedule->command('analytics:fetch')->daily();
+        $schedule->command('php artisan inspire')->everyMinute();
     }
 
     /**
