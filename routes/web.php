@@ -59,6 +59,8 @@ Route::get('optimize', function () {
     Artisan::call('optimize:clear');
     dump('Optimization Done');
 
+
+
 });
 
 
