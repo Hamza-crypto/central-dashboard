@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('queue:work', [
         '--stop-when-empty'
         ])->withoutOverlapping();
+        //
     }
 
     /**
