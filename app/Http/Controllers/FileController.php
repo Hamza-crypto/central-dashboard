@@ -60,7 +60,7 @@ class FileController extends Controller
         $categories = $request->input('categories');
         $selectedWebsites = $request->input('selected');
 
-        if(!$selectedWebsites) {
+        if (!$selectedWebsites) {
             return back()->with(['error' => 'You did not make any selection']);
         }
         // Find the model instance
