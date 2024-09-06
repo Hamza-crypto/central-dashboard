@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\FileEntry;
+use App\Models\File;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 
@@ -14,10 +14,9 @@ class DeleteUnusedEntries extends Command
 
     public function handle()
     {
-        $twoHoursAgo = Carbon::now()->subHours(2);
+        $twoHoursAgo = Carbon::now()->subHours(8);
 
-        FileEntry::where('active', 1)
-            ->whereNull('website_data')
+        File::whereNull('website_data')
             ->where('created_at', '<=', $twoHoursAgo)
             ->delete();
     }
